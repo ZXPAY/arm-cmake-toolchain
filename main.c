@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "add.h"
 #include "fpu.h"
 #include "test_vect.h"
 
 int main(void) {
-
     enable_fpu();
 
     int c = add(10, 20);
@@ -18,5 +18,22 @@ int main(void) {
 
     test_vect();
 
+    while(true) {
+        __asm("nop");
+    }
+
     return 0;
+}
+
+int flag = 0;
+void BusFault_Handler(void) {
+    while(true) {
+        flag = 1;
+    }
+}
+
+void DebugMon_Handler(void) {
+    while(true) {
+        __asm("nop");
+    }
 }

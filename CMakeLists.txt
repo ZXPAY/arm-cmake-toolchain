@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.18.5)
 project(hello_world)
 
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
-set(STARTUP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/startup/startup.c")
-set(LINKER_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ldscripts/gcc.ld")
+set(STARTUP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/platform/stm32f767zi/startup.c")
+set(LINKER_FILE "${CMAKE_CURRENT_SOURCE_DIR}/platform/stm32f767zi/gcc.ld")
 set(LINKER_MAP_FLAGS "-Wl,-Map=${PROJECT_NAME}.map")
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CPU_FLAGS -mthumb -mthumb-interwork -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
+set(CPU_FLAGS -mthumb -mthumb-interwork -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 set(DEBUG_FLAGS dwarf-2)
 set(OPTIMIZATION_FLAGS O0)
 set(CFLAGS
@@ -79,7 +79,10 @@ add_custom_command(
     COMMAND ${CMAKE_SIZE} -A ${PROJECT_NAME}.elf)
 
 # Include reference
-target_include_directories(${PROJECT_NAME} PUBLIC inc)
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    inc
+    platform/stm32f767zi
+    )
 
 
 
