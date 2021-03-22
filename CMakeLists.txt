@@ -44,7 +44,7 @@ add_link_options(${LDFLAGS})
 # Assembly file
 FILE(GLOB ASMSRC src/*.s)
 # C file
-FILE(GLOB CSRC src/*.c)
+FILE(GLOB CSRC src/*.c segger_rtt/*.c)
 # C++ file
 FILE(GLOB CXXSRC src/*.cpp)
 
@@ -81,6 +81,7 @@ add_custom_command(
 # Include reference
 target_include_directories(${PROJECT_NAME} PUBLIC 
     inc
+    segger_rtt
     platform/stm32f767zi
     )
 

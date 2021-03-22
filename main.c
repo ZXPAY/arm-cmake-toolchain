@@ -1,23 +1,32 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdint.h>
+
+#include "SEGGER_RTT.h"
 #include "add.h"
 #include "fpu.h"
-#include "test_vect.h"
+
+extern uint32_t __etext[];
+extern uint32_t __data_start__[];
+extern uint32_t __data_end__[];
+extern uint32_t __bss_start__[];
+extern uint32_t __bss_end__[];
+extern uint32_t __stack[];
+
+int a = 100;
 
 int main(void) {
     enable_fpu();
 
-    int c = add(10, 20);
+    SEGGER_RTT_printf(0, "__etext:         0x%p\n", __etext);
+    SEGGER_RTT_printf(0, "__data_start__:  0x%p\n", __data_start__);
+    SEGGER_RTT_printf(0, "__data_end__:    0x%p\n", __data_end__);
+    SEGGER_RTT_printf(0, "__bss_start__:   0x%p\n", __bss_start__);
+    SEGGER_RTT_printf(0, "__bss_end__:     0x%p\n", __bss_end__);
+    SEGGER_RTT_printf(0, "__stack:         0x%p\n", __stack);
     
-    float w = 1.413;
-    float b = 1.2 + w;
-    float d = f32_mul(b, 3.14);
-
-    printf("Hello world !!!\n");
-    printf("%f\n", b);
-
-    test_vect();
-
+    SEGGER_RTT_printf(0, "Start main\n");
+    SEGGER_RTT_printf(0, "a      :         0x%p\n", &a);
     while(true) {
         __asm("nop");
     }
@@ -25,15 +34,3 @@ int main(void) {
     return 0;
 }
 
-int flag = 0;
-void BusFault_Handler(void) {
-    while(true) {
-        flag = 1;
-    }
-}
-
-void DebugMon_Handler(void) {
-    while(true) {
-        __asm("nop");
-    }
-}

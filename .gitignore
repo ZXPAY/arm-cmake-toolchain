@@ -56,3 +56,8 @@ include/*
 lib/*
 bin/*
 test/test_runner
+
+
+# zephyr RTOS source code
+zephyr-zephyr-v2.5.0/*
+
