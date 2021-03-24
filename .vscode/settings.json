@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.json": "json",
+        "fpu.h": "c",
+        "test_eigen.h": "c"
+    }
+}

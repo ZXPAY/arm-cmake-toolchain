@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "SEGGER_RTT.h"
 #include "add.h"
 #include "fpu.h"
+#include "test_eigen.h"
 
 extern uint32_t __etext[];
 extern uint32_t __data_start__[];
@@ -27,6 +29,20 @@ int main(void) {
     
     SEGGER_RTT_printf(0, "Start main\n");
     SEGGER_RTT_printf(0, "a      :         0x%p\n", &a);
+    
+    char temp_str[50];
+    memset(temp_str, 0, sizeof(temp_str));
+    sprintf(temp_str, "Float value is %f\n", 3.144444);
+    
+    int i=0;
+    while(temp_str[i] != '\0') {
+        SEGGER_RTT_printf(0, "%c", temp_str[i]);
+        i++;
+    }
+    
+    demo_MatrixXd();
+    SEGGER_RTT_printf(0, "Start \n");
+
     while(true) {
         __asm("nop");
     }

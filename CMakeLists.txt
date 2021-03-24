@@ -55,6 +55,9 @@ message(STATUS ${STARTUP_FILE})
 message(STATUS ${LINKER_FILE})
 message(STATUS ${CMAKE_OBJCOPY})
 
+# Find the eigen library
+find_package(Eigen3)
+
 set_property(SOURCE ${ASMSRC} PROPERTY LANGUAGE C)
 add_executable(${PROJECT_NAME} ${STARTUP_FILE} main.c ${CSRC} ${CXXSRC} ${ASMSRC})
 
@@ -83,6 +86,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     inc
     segger_rtt
     platform/stm32f767zi
+    eigen
     )
 
 
