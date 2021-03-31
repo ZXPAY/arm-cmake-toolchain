@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
 #include "SEGGER_RTT.h"
 #include "add.h"
 #include "fpu.h"
