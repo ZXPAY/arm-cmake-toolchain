@@ -1,12 +1,9 @@
-#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <string.h>
-
+#include <stdint.h>
 #include "SEGGER_RTT.h"
 #include "add.h"
 #include "fpu.h"
-#include "test_eigen.h"
 
 extern uint32_t __etext[];
 extern uint32_t __data_start__[];
@@ -40,7 +37,6 @@ int main(void) {
         i++;
     }
     
-    demo_MatrixXd();
     SEGGER_RTT_printf(0, "Start \n");
 
     while(true) {

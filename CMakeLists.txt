@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(hello_world)
 
@@ -55,24 +55,21 @@ message(STATUS ${STARTUP_FILE})
 message(STATUS ${LINKER_FILE})
 message(STATUS ${CMAKE_OBJCOPY})
 
-# Find the eigen library
-find_package(Eigen3)
-
 set_property(SOURCE ${ASMSRC} PROPERTY LANGUAGE C)
 add_executable(${PROJECT_NAME} ${STARTUP_FILE} main.c ${CSRC} ${CXXSRC} ${ASMSRC})
 
 # Generate the hex and bin file
 add_custom_target(
     ${PROJECT_NAME}.hex ALL
-    DEPENDS ${PROJECT_NAME}.elf
+    DEPENDS ${PROJECT_NAME}
     COMMAND ${CMAKE_OBJCOPY} -O ihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex)
 add_custom_target(
     ${PROJECT_NAME}.bin ALL
-    DEPENDS ${PROJECT_NAME}.elf
+    DEPENDS ${PROJECT_NAME}
     COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin)
 add_custom_target(
     ${PROJECT_NAME}.lst ALL
-    DEPENDS ${PROJECT_NAME}.elf
+    DEPENDS ${PROJECT_NAME}
     COMMAND ${CMAKE_OBJDUMP} -h -S -C ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst)
 add_custom_command(
     TARGET ${PROJECT_NAME}.lst
@@ -86,7 +83,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     inc
     segger_rtt
     platform/stm32f767zi
-    eigen
     )
 
 
