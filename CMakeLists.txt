@@ -5,7 +5,6 @@ project(hello_world)
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 set(STARTUP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/platform/stm32f767zi/startup.c")
 set(LINKER_FILE "${CMAKE_CURRENT_SOURCE_DIR}/platform/stm32f767zi/gcc.ld")
-set(LINKER_MAP_FLAGS "-Wl,-Map=${PROJECT_NAME}.map")
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
@@ -30,15 +29,16 @@ set(CFLAGS
     )
 set(LDFLAGS
     -T${LINKER_FILE}
-    ${LINKER_MAP_FLAGS}
     -g${DEBUG_FLAGS}
     ${CPU_FLAGS}
     -u __isr_vectors
     -fsingle-precision-constant
 )
-
-add_compile_options(${CFLAGS})
-add_link_options(${LDFLAGS})
+set(DEPEN_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/segger_rtt
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/stm32f767zi
+)
 
 # Assembly file
 FILE(GLOB ASMSRC src/*.s)
@@ -55,7 +55,29 @@ message(STATUS ${LINKER_FILE})
 message(STATUS ${CMAKE_OBJCOPY})
 
 set_property(SOURCE ${ASMSRC} PROPERTY LANGUAGE C)
-add_executable(${PROJECT_NAME} ${STARTUP_FILE} main.c ${CSRC} ${CXXSRC} ${ASMSRC})
+add_compile_options(${CFLAGS})
+# add_link_options(${LDFLAGS} -Wl,-Map=${PROJECT_NAME}.map)
+
+add_library(
+    SRCS STATIC
+    ${STARTUP_FILE}
+    ${CSRC}
+    ${CXXSRC}
+    ${ASMSRC}
+)
+target_include_directories(SRCS PUBLIC 
+    ${DEPEN_DIR}
+    )
+
+add_executable(${PROJECT_NAME} main.c) 
+target_link_options(${PROJECT_NAME} PRIVATE
+    -T${LINKER_FILE}
+    -g${DEBUG_FLAGS}
+    ${CPU_FLAGS}
+    -u __isr_vectors
+    -fsingle-precision-constant
+    -Wl,-Map=${PROJECT_NAME}.map
+)
 
 # Generate the hex and bin file
 add_custom_target(
@@ -79,12 +101,14 @@ add_custom_command(
 
 # Include reference
 target_include_directories(${PROJECT_NAME} PUBLIC 
-    inc
-    segger_rtt
-    platform/stm32f767zi
+    ${DEPEN_DIR}
     )
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    SRCS
     m
 )
 
+
+# Build the test files
+add_subdirectory(test)
 
