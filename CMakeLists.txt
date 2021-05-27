@@ -33,7 +33,6 @@ set(LDFLAGS
     ${LINKER_MAP_FLAGS}
     -g${DEBUG_FLAGS}
     ${CPU_FLAGS}
-    -lm
     -u __isr_vectors
     -fsingle-precision-constant
 )
@@ -84,6 +83,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     segger_rtt
     platform/stm32f767zi
     )
-
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    m
+)
 
 
